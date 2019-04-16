@@ -4,6 +4,7 @@ import org.jooq.*;
 import org.jooq.conf.Settings;
 import org.jooq.conf.StatementType;
 import org.jooq.impl.DSL;
+
 import static jooq.tables.AcraExample.ACRA_EXAMPLE;
 
 import java.nio.charset.Charset;
@@ -11,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Random;
+
 import org.apache.commons.cli.*;
 
 public class Main {
@@ -22,74 +24,71 @@ public class Main {
     public static final String[] PASSWORDS = {"killer", "master", "angel1", "liverpool", "jesus1", "babygirl11", "naruto", "superman1290", "50cent", "letmeit"};
 
     public static void main(String[] args) {
-        if (args.length != 0) {
-            Options options = new Options();
-            Option jdbc = new Option("j", "jdbc", true, "jdbc string: jdbc:postgresql://localhost:5432/test");
-            jdbc.setRequired(true);
-            options.addOption(jdbc);
 
-            Option userName = new Option("u", "user", true, "user name");
-            userName.setRequired(true);
-            options.addOption(userName);
+        Options options = new Options();
+        Option jdbc = new Option("j", "jdbc", true, "jdbc string: jdbc:postgresql://localhost:5432/test");
+        jdbc.setRequired(true);
+        options.addOption(jdbc);
 
-            Option password = new Option("p", "password", true, "password");
-            password.setRequired(true);
-            options.addOption(password);
+        Option userName = new Option("u", "user", true, "user name");
+        userName.setRequired(true);
+        options.addOption(userName);
 
-            Option records = new Option("insert", true, "number of records to insert");
-            records.setRequired(false);
-            options.addOption(records);
+        Option password = new Option("p", "password", true, "password");
+        password.setRequired(true);
+        options.addOption(password);
 
-            Option all_select = new Option("select", true, "select * from acra_example limit <Arg>");
-            all_select.setRequired(false);
-            options.addOption(all_select);
+        Option records = new Option("insert", true, "number of records to insert");
+        records.setRequired(false);
+        options.addOption(records);
 
-            Option email_select = new Option("email", true, "value of email to select");
-            email_select.setRequired(false);
-            options.addOption(email_select);
+        Option all_select = new Option("select", true, "select * from acra_example limit <Arg>");
+        all_select.setRequired(false);
+        options.addOption(all_select);
 
-            Option name_select = new Option("name", true, "value of name to select");
-            name_select.setRequired(false);
-            options.addOption(name_select);
+        Option email_select = new Option("email", true, "value of email to select");
+        email_select.setRequired(false);
+        options.addOption(email_select);
 
-            Option password_select = new Option("pass", "password_select", true, "value of password to select");
-            password_select.setRequired(false);
-            options.addOption(password_select);
+        Option name_select = new Option("name", true, "value of name to select");
+        name_select.setRequired(false);
+        options.addOption(name_select);
 
-            Option drop = new Option("drop", "drop_table", false, "drop test table acra-example");
-            drop.setRequired(false);
-            options.addOption(drop);
+        Option password_select = new Option("pass", "password_select", true, "value of password to select");
+        password_select.setRequired(false);
+        options.addOption(password_select);
 
-            CommandLineParser parser = new DefaultParser();
-            HelpFormatter formatter = new HelpFormatter();
+        Option drop = new Option("drop", "drop_table", false, "drop test table acra-example");
+        drop.setRequired(false);
+        options.addOption(drop);
 
-            try {
-                cmd = parser.parse(options, args);
-            } catch (ParseException e) {
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
 
-                System.out.println(e.getMessage());
-                formatter.printHelp("utility", options);
-                System.exit(1);
-            }
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
 
-            URL = cmd.getOptionValue("jdbc");
-            USER_NAME = cmd.getOptionValue("user");
-            PASSWORD = cmd.getOptionValue("password");
-            try {
-                if (cmd.getOptionValue("insert") != null) {
-                    ROWS = Integer.parseInt(cmd.getOptionValue("insert"));
-                }
-            } catch (NumberFormatException e) {
-                System.out.println(e.getMessage());
-                System.exit(1);
-            }
-
-            EMAIL_TO_RETREIVE = cmd.getOptionValue("email");
-            NAME_TO_RETREIVE = cmd.getOptionValue("name");
-            PASSWORD_TO_RETREIVE = cmd.getOptionValue("pass");
-        } else {
-            //use default parameters. Will open and close connecttion to db.
+            System.out.println(e.getMessage());
+            formatter.printHelp("utility", options);
+            System.exit(1);
         }
+
+        URL = cmd.getOptionValue("jdbc");
+        USER_NAME = cmd.getOptionValue("user");
+        PASSWORD = cmd.getOptionValue("password");
+        try {
+            if (cmd.getOptionValue("insert") != null) {
+                ROWS = Integer.parseInt(cmd.getOptionValue("insert"));
+            }
+        } catch (NumberFormatException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
+
+        EMAIL_TO_RETREIVE = cmd.getOptionValue("email");
+        NAME_TO_RETREIVE = cmd.getOptionValue("name");
+        PASSWORD_TO_RETREIVE = cmd.getOptionValue("pass");
 
 
         try (Connection conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD)) {
@@ -110,8 +109,8 @@ public class Main {
             Random rand = new Random();
             for (int i = 0; i < ROWS; i++) {
                 CreateUserAccount(create, NAMES[rand.nextInt(NAMES.length)],
-                                          EMAILS[rand.nextInt(EMAILS.length)],
-                                          PASSWORDS[rand.nextInt(PASSWORDS.length)]);
+                        EMAILS[rand.nextInt(EMAILS.length)],
+                        PASSWORDS[rand.nextInt(PASSWORDS.length)]);
             }
             if (ROWS != 0) {
                 System.out.println("Insert successful");
@@ -170,9 +169,9 @@ public class Main {
     private static void PrintResult(Result<Record> result) {
         for (Record rec : result) {
             Integer id = rec.getValue(ACRA_EXAMPLE.ID);
-            byte[]  name = rec.getValue(ACRA_EXAMPLE.NAME);
-            byte[]  email = rec.getValue(ACRA_EXAMPLE.EMAIL);
-            byte[]  recPassword = rec.getValue(ACRA_EXAMPLE.PASSWORD);
+            byte[] name = rec.getValue(ACRA_EXAMPLE.NAME);
+            byte[] email = rec.getValue(ACRA_EXAMPLE.EMAIL);
+            byte[] recPassword = rec.getValue(ACRA_EXAMPLE.PASSWORD);
             System.out.println("id: " + id + "\nname: " + new String(name, defaultCharset) + "\nemail: " + new String(email, defaultCharset) + "\npassword: " + new String(recPassword, defaultCharset));
             System.out.println();
         }
@@ -204,7 +203,6 @@ public class Main {
     public static void CreateUserAccount(DSLContext database, String name, String email, String password) {
         InsertQuery(database, name.getBytes(defaultCharset), email.getBytes(defaultCharset), password.getBytes(defaultCharset));
     }
-
 
 
     // CMD parameters
