@@ -1,0 +1,15 @@
+version: 0.85.0
+schemas:
+  - table: acra_example
+    columns:
+      - id
+      - name
+      - email
+      - password
+    encrypted:
+      - column: name
+        searchable: true
+      - column: email
+        searchable: true
+      - column: password
+        searchable: true
